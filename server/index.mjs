@@ -8,14 +8,26 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:8081',
+    'http://localhost:8082',
+    'http://localhost:8083',
+    'https://quizburst.vercel.app',
+    'https://quizburst-main.vercel.app',
+    process.env.VITE_API_URL
+  ].filter(Boolean),
+  credentials: true
+}));
 // Increase JSON and URL-encoded body size limits to support image data URLs
 app.use(express.json({ limit: '15mb' }));
 app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 
 const PORT = process.env.PORT || 4000;
-const MONGODB_URI = process.env.VITE_MONGODB_URI;
-const JWT_SECRET = process.env.VITE_JWT_SECRET || 'change-me';
+const MONGODB_URI = process.env.MONGODB_URI || process.env.VITE_MONGODB_URI;
+const JWT_SECRET = process.env.JWT_SECRET || process.env.VITE_JWT_SECRET || 'change-me';
 
 if (!MONGODB_URI) {
   console.error('Missing VITE_MONGODB_URI in environment');
