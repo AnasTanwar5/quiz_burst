@@ -18,7 +18,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", // for local dev
-      "https://your-app-name.vercel.app", // replace with your deployed frontend
+      "https://https://quizburst-ten.vercel.app/", // replace with your deployed frontend
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
