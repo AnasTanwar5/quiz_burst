@@ -249,12 +249,8 @@ const Profile = () => {
                                 toast.error('No session found for this quiz yet');
                                 return;
                               }
-                              const resp = await fetch(`/api/sessions/${sid}/results/download`, {
-                                method: "GET",
-                                headers: { 
-                                  "Content-Type": "application/json",
-                                  'Authorization': `Bearer ${localStorage.getItem('authToken')}` 
-                                }
+                              const resp = await fetch(`${import.meta.env.VITE_API_URL}/sessions/${sid}/results/download`, {
+                                headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
                               });
                               if (!resp.ok) throw new Error('Failed to download');
                               const blob = await resp.blob();

@@ -88,12 +88,8 @@ const Leaderboard = () => {
     const currentSessionId = sessionId || localStorage.getItem("sessionId");
     if (!currentSessionId) return;
     try {
-      const resp = await fetch(`/api/sessions/${currentSessionId}/results/download`, {
-        method: "GET",
-        headers: { 
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}` 
-        }
+      const resp = await fetch(`${import.meta.env.VITE_API_URL}/sessions/${currentSessionId}/results/download`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
       });
       if (!resp.ok) throw new Error('Server download failed');
       const blob = await resp.blob();
@@ -129,19 +125,13 @@ const Leaderboard = () => {
   };
 
   const endQuiz = async () => {
-    console.log("=== END QUIZ FUNCTION CALLED ===");
     const currentSessionId = sessionId || localStorage.getItem("sessionId");
     console.log("Ending quiz for session:", currentSessionId);
     console.log("Current session status:", sessionStatus);
-    console.log("sessionId from params:", sessionId);
-    console.log("sessionId from localStorage:", localStorage.getItem("sessionId"));
-    
     if (!currentSessionId) {
-      console.error("No session ID found!");
       toast.error("No session ID found");
       return;
     }
-    
     try {
       console.log("Calling API to end session...");
       const response = await api.post(`/sessions/${currentSessionId}/end`);
@@ -221,7 +211,7 @@ const Leaderboard = () => {
                         <div className="flex-shrink-0">
                           {getRankIcon(index)}
                         </div>
-            <div>
+                        <div>
                           <h3 className="text-xl font-bold">{player.name}</h3>
                           <p className="text-sm text-muted-foreground">
                             {player.correctAnswers}/{player.totalAnswers} correct answers
@@ -242,9 +232,7 @@ const Leaderboard = () => {
               </div>
 
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
-              Session ID: {sessionId || localStorage.getItem("sessionId") || "Not found"}
-            </div>
+            <div />
             <div className="flex items-center gap-2">
               <Button
                 onClick={() => {
@@ -268,51 +256,14 @@ const Leaderboard = () => {
                 Download Results
               </Button>
               <Button
-                onClick={async () => {
-                  console.log("🔥 END QUIZ BUTTON CLICKED! 🔥");
-                  alert("End Quiz button clicked! Check console for details.");
-                  
-                  const currentSessionId = sessionId || localStorage.getItem("sessionId");
-                  console.log("Session ID:", currentSessionId);
-                  
-                  if (!currentSessionId) {
-                    alert("No session ID found!");
-                    return;
-                  }
-                  
-                  try {
-                    console.log("Making API call to end session...");
-                    const response = await fetch(`/api/sessions/${currentSessionId}/end`, {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json'
-                      }
-                    });
-                    
-                    const data = await response.json();
-                    console.log("API Response:", response.status, data);
-                    
-                    if (response.ok) {
-                      alert("✅ Quiz ended successfully!");
-                      toast.success("Quiz ended successfully for all participants");
-                      // Refresh the page to show updated data
-                      window.location.reload();
-                    } else {
-                      alert(`❌ Error: ${data.message || 'Failed to end quiz'}`);
-                      toast.error(data.message || "Failed to end quiz");
-                    }
-                  } catch (error) {
-                    console.error("Error:", error);
-                    alert(`❌ Network Error: ${error.message}`);
-                    toast.error("Network error occurred");
-                  }
-                }}
+                onClick={endQuiz}
                 disabled={false}
                 variant="destructive"
-                className="rounded-2xl px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold"
-                title="Click to end the quiz for all participants"
+                className="rounded-2xl px-6 py-2"
+                title={`Session Status: ${sessionStatus} (Button ENABLED - can end quiz anytime)`}
               >
-                🔥 END QUIZ NOW 🔥
+                <Power className="mr-2 h-4 w-4" />
+                End Quiz {sessionStatus !== 'active' ? `(${sessionStatus})` : ''}
               </Button>
             </div>
           </div>
