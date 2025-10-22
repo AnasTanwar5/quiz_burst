@@ -1,31 +1,15 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "server/index.mjs",
-      "use": "@vercel/node"
-    },
+    { "src": "server/index.mjs", "use": "@vercel/node" },
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "config": { "distDir": "dist" }
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/server/index.mjs"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/dist/$1"
-    }
-  ],
-  "env": {
-    "MONGODB_URI": "@mongodb_uri",
-    "JWT_SECRET": "@jwt_secret",
-    "NODE_ENV": "production"
-  }
+    { "src": "/api/(.*)", "dest": "server/index.mjs" },
+    { "src": "/(.*)", "dest": "/dist/$1" }
+  ]
 }
