@@ -1,8 +1,10 @@
 // Minimal frontend API helper used by pages
 
 // Simple REST API helper used by pages after backend enablement
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+
 export const api = {
-  baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:4000',
+  baseUrl: API_BASE_URL,
   token: () => localStorage.getItem('authToken') || '',
   headers() {
     const h = { 'Content-Type': 'application/json' } as Record<string, string>;
@@ -12,7 +14,7 @@ export const api = {
   },
   async post(path: string, body?: any) {
     console.log('API POST:', path, 'Body:', body, 'Token:', this.token() ? 'present' : 'missing'); // Debug log
-    const res = await fetch(`/api${path}`, { 
+    const res = await fetch(`${API_BASE_URL}/api${path}`, { 
       method: 'POST', 
       headers: this.headers(), 
       body: JSON.stringify(body || {}) 
@@ -24,7 +26,7 @@ export const api = {
   },
   async get(path: string) {
     console.log('API GET:', path, 'Token:', this.token() ? 'present' : 'missing'); // Debug log
-    const res = await fetch(`/api${path}`, { 
+    const res = await fetch(`${API_BASE_URL}/api${path}`, { 
       method: 'GET',
       headers: this.headers() 
     });
@@ -35,7 +37,7 @@ export const api = {
   },
   async delete(path: string) {
     console.log('API DELETE:', path, 'Token:', this.token() ? 'present' : 'missing'); // Debug log
-    const res = await fetch(`/api${path}`, { 
+    const res = await fetch(`${API_BASE_URL}/api${path}`, { 
       method: 'DELETE', 
       headers: this.headers() 
     });
