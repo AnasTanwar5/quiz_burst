@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import csv from "csv-stringify/sync";
 import bodyParser from "body-parser";
 
