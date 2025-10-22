@@ -70,8 +70,10 @@ const HostDashboard = () => {
 
   const downloadResults = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/sessions/${sessionId}/results/download`, {
+      const response = await fetch(`/api/sessions/${sessionId}/results/download`, {
+        method: "GET",
         headers: {
+          "Content-Type": "application/json",
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
         }
       });

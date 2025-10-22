@@ -88,8 +88,12 @@ const Leaderboard = () => {
     const currentSessionId = sessionId || localStorage.getItem("sessionId");
     if (!currentSessionId) return;
     try {
-      const resp = await fetch(`${import.meta.env.VITE_API_URL}/sessions/${currentSessionId}/results/download`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+      const resp = await fetch(`/api/sessions/${currentSessionId}/results/download`, {
+        method: "GET",
+        headers: { 
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}` 
+        }
       });
       if (!resp.ok) throw new Error('Server download failed');
       const blob = await resp.blob();
@@ -217,7 +221,7 @@ const Leaderboard = () => {
                         <div className="flex-shrink-0">
                           {getRankIcon(index)}
                         </div>
-                        <div>
+            <div>
                           <h3 className="text-xl font-bold">{player.name}</h3>
                           <p className="text-sm text-muted-foreground">
                             {player.correctAnswers}/{player.totalAnswers} correct answers
@@ -278,7 +282,7 @@ const Leaderboard = () => {
                   
                   try {
                     console.log("Making API call to end session...");
-                    const response = await fetch(`http://localhost:4000/sessions/${currentSessionId}/end`, {
+                    const response = await fetch(`/api/sessions/${currentSessionId}/end`, {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json'

@@ -12,7 +12,11 @@ export const api = {
   },
   async post(path: string, body?: any) {
     console.log('API POST:', path, 'Body:', body, 'Token:', this.token() ? 'present' : 'missing'); // Debug log
-    const res = await fetch(`${this.baseUrl}${path}`, { method: 'POST', headers: this.headers(), body: JSON.stringify(body || {}) });
+    const res = await fetch(`/api${path}`, { 
+      method: 'POST', 
+      headers: this.headers(), 
+      body: JSON.stringify(body || {}) 
+    });
     const data = await res.json().catch(() => ({}));
     console.log('API POST response:', path, res.status, data); // Debug log
     if (!res.ok) throw new Error(data?.message || 'Request failed');
@@ -20,7 +24,10 @@ export const api = {
   },
   async get(path: string) {
     console.log('API GET:', path, 'Token:', this.token() ? 'present' : 'missing'); // Debug log
-    const res = await fetch(`${this.baseUrl}${path}`, { headers: this.headers() });
+    const res = await fetch(`/api${path}`, { 
+      method: 'GET',
+      headers: this.headers() 
+    });
     const data = await res.json().catch(() => ({}));
     console.log('API GET response:', path, res.status, data); // Debug log
     if (!res.ok) throw new Error(data?.message || 'Request failed');
@@ -28,7 +35,10 @@ export const api = {
   },
   async delete(path: string) {
     console.log('API DELETE:', path, 'Token:', this.token() ? 'present' : 'missing'); // Debug log
-    const res = await fetch(`${this.baseUrl}${path}`, { method: 'DELETE', headers: this.headers() });
+    const res = await fetch(`/api${path}`, { 
+      method: 'DELETE', 
+      headers: this.headers() 
+    });
     const data = await res.json().catch(() => ({}));
     console.log('API DELETE response:', path, res.status, data); // Debug log
     if (!res.ok) throw new Error(data?.message || 'Request failed');
