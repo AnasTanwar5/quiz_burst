@@ -12,9 +12,17 @@ const Index = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-    const role = localStorage.getItem('userType');
     setIsLoggedIn(!!token);
-    setUserRole(role);
+    
+    if (token) {
+      // Decode JWT token to get role
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setUserRole(payload.role || 'user');
+      } catch (e) {
+        setUserRole('user');
+      }
+    }
   }, []);
 
   return (
