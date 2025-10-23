@@ -619,7 +619,7 @@ app.get('/sessions/:sessionId/participants/public', async (req, res) => {
     if (!session) return res.status(404).json({ message: 'Session not found' });
     
     const participants = await db.collection('participants')
-      .find({ sessionId })
+      .find({ sessionId: String(session._id) })
       .sort({ joinedAt: 1 })
       .toArray();
     
@@ -645,7 +645,7 @@ app.get('/sessions/:sessionId/participants', authMiddleware, async (req, res) =>
     }
     
     const participants = await db.collection('participants')
-      .find({ sessionId })
+      .find({ sessionId: String(session._id) })
       .sort({ joinedAt: 1 })
       .toArray();
     
@@ -694,7 +694,7 @@ app.get('/sessions/:sessionId/results/download', async (req, res) => {
     
     // Get all participants and their answers
     const participants = await db.collection('participants')
-      .find({ sessionId })
+      .find({ sessionId: String(session._id) })
       .sort({ joinedAt: 1 })
       .toArray();
     
