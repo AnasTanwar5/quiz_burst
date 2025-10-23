@@ -4,14 +4,22 @@ import dotenv from 'dotenv';
 import { MongoClient, ObjectId } from 'mongodb';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
 // Increase JSON and URL-encoded body size limits to support image data URLs
 app.use(express.json({ limit: '15mb' }));
 app.use(express.urlencoded({ extended: true, limit: '15mb' }));
+
+// Serve static files from the React app build
+app.use(express.static(path.join(__dirname, '../dist')));
 
 const PORT = process.env.PORT || 4000;
 const MONGODB_URI = process.env.VITE_MONGODB_URI;
@@ -1001,6 +1009,11 @@ app.post('/cleanup', async (req, res) => {
     console.error(e);
     res.status(500).json({ message: 'Cleanup failed' });
   }
+});
+
+// Catch-all handler: send back React's index.html file for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 initDb().then(() => {

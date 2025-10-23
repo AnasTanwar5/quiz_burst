@@ -112,7 +112,7 @@ const HostDashboard = () => {
       await api.post(`/sessions/${sessionId}/next-question`);
       toast.success("Moved to next question!");
       // Refresh session data to get updated question index
-      await loadSessionData();
+      await fetchSessionData();
     } catch (error: any) {
       toast.error(error.message || "Failed to move to next question");
     }

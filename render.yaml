@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: quizburst
+    env: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm run server
+    envVars:
+      - key: VITE_MONGODB_URI
+        sync: false
+      - key: VITE_JWT_SECRET
+        sync: false
+      - key: VITE_API_URL
+        sync: false
