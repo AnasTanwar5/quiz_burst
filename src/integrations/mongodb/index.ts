@@ -11,14 +11,20 @@ export const api = {
     return h;
   },
   async post(path: string, body?: any) {
-    const res = await fetch(`${this.baseUrl}${path}`, { method: 'POST', headers: this.headers(), body: JSON.stringify(body || {}) });
+    const res = await fetch(`${this.baseUrl}${path}`, { method: 'POST', headers: this.headers(), body: JSON.stringify(body || {}) }).catch((e) => {
+      console.error('Network error (POST):', path, e);
+      throw new Error('Network error');
+    });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data?.message || 'Request failed');
     return data;
   },
   async get(path: string) {
     console.log('API GET:', path, 'Token:', this.token() ? 'present' : 'missing'); // Debug log
-    const res = await fetch(`${this.baseUrl}${path}`, { headers: this.headers() });
+    const res = await fetch(`${this.baseUrl}${path}`, { headers: this.headers() }).catch((e) => {
+      console.error('Network error (GET):', path, e);
+      throw new Error('Network error');
+    });
     const data = await res.json().catch(() => ({}));
     console.log('API GET response:', path, res.status, data); // Debug log
     if (!res.ok) throw new Error(data?.message || 'Request failed');
@@ -26,7 +32,10 @@ export const api = {
   },
   async delete(path: string) {
     console.log('API DELETE:', path, 'Token:', this.token() ? 'present' : 'missing'); // Debug log
-    const res = await fetch(`${this.baseUrl}${path}`, { method: 'DELETE', headers: this.headers() });
+    const res = await fetch(`${this.baseUrl}${path}`, { method: 'DELETE', headers: this.headers() }).catch((e) => {
+      console.error('Network error (DELETE):', path, e);
+      throw new Error('Network error');
+    });
     const data = await res.json().catch(() => ({}));
     console.log('API DELETE response:', path, res.status, data); // Debug log
     if (!res.ok) throw new Error(data?.message || 'Request failed');

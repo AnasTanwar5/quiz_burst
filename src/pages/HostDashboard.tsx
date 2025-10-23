@@ -39,6 +39,10 @@ const HostDashboard = () => {
       const sessionRes = await api.get(`/sessions/${sessionId}`);
       console.log("Session data:", sessionRes); // Debug log
       setSession(sessionRes.session);
+      // Ensure quiz code is visible even if localStorage fallback is missing
+      if (sessionRes?.session?.code) {
+        setQuizCode(sessionRes.session.code);
+      }
       
       // Try to fetch participants using public endpoint
       try {

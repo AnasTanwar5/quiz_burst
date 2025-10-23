@@ -34,6 +34,7 @@ const Profile = () => {
       
       if (!userRes.user) {
         console.log("No user found, redirecting to auth"); // Debug log
+        setLoading(false);
         navigate("/auth");
         return;
       }
@@ -75,6 +76,7 @@ const Profile = () => {
         // Clear invalid token and redirect to login
         localStorage.removeItem("authToken");
         toast.error("Session expired. Please login again.");
+        setLoading(false);
         navigate("/auth");
         return;
       }
