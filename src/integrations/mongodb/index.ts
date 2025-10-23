@@ -2,7 +2,7 @@
 
 // Simple REST API helper used by pages after backend enablement
 export const api = {
-  baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:4000',
+  baseUrl: import.meta.env.VITE_API_URL || (window.location.protocol + '//' + window.location.host),
   token: () => localStorage.getItem('authToken') || '',
   headers() {
     const h = { 'Content-Type': 'application/json' } as Record<string, string>;
