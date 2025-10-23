@@ -89,6 +89,11 @@ const Profile = () => {
         }
         return;
       }
+      if (error.message === 'Network error') {
+        // Avoid loop on HTML fallback
+        setLoading(false);
+        return;
+      }
       toast.error(error.message || "Failed to load profile");
     } finally {
       setLoading(false);

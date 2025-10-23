@@ -25,6 +25,11 @@ export const api = {
       console.error('Network error (GET):', path, e);
       throw new Error('Network error');
     });
+    // If server sent HTML (e.g., error page), treat as failure
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('text/html')) {
+      throw new Error('Network error');
+    }
     const data = await res.json().catch(() => ({}));
     console.log('API GET response:', path, res.status, data); // Debug log
     if (!res.ok) throw new Error(data?.message || 'Request failed');

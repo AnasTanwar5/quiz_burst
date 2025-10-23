@@ -106,6 +106,9 @@ app.get('/auth/me', authMiddleware, async (req, res) => {
     const users = db.collection('users');
     const user = await users.findOne({ _id: new ObjectId(req.user.userId) }, { projection: { password: 0 } });
     console.log('Auth /me - found user:', user);
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
     res.json({ user });
   } catch (e) {
     console.error('Auth /me error:', e);
