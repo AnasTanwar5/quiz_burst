@@ -24,8 +24,10 @@ const Profile = () => {
   const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    if (!redirecting) {
+      fetchProfile();
+    }
+  }, [redirecting]);
 
   const fetchProfile = async () => {
     try {
