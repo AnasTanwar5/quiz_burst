@@ -14,8 +14,17 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors({
-  origin: true, // Allow all origins
-  credentials: true
+  origin: true, // Echo back the request origin
+  credentials: true,
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
+}));
+// Explicitly handle preflight requests so they don't fall through to the SPA handler
+app.options('*', cors({
+  origin: true,
+  credentials: true,
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
 }));
 // Increase JSON and URL-encoded body size limits to support image data URLs
 app.use(express.json({ limit: '15mb' }));
