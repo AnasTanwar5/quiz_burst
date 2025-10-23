@@ -21,6 +21,7 @@ const Profile = () => {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [userQuizzes, setUserQuizzes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
     fetchProfile();
@@ -34,8 +35,11 @@ const Profile = () => {
       
       if (!userRes.user) {
         console.log("No user found, redirecting to auth"); // Debug log
-        setLoading(false);
-        navigate("/auth");
+        if (!redirecting) {
+          setRedirecting(true);
+          setLoading(false);
+          navigate("/auth");
+        }
         return;
       }
 
@@ -76,8 +80,11 @@ const Profile = () => {
         // Clear invalid token and redirect to login
         localStorage.removeItem("authToken");
         toast.error("Session expired. Please login again.");
-        setLoading(false);
-        navigate("/auth");
+        if (!redirecting) {
+          setRedirecting(true);
+          setLoading(false);
+          navigate("/auth");
+        }
         return;
       }
       toast.error(error.message || "Failed to load profile");

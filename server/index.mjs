@@ -101,9 +101,16 @@ function authMiddleware(req, res, next) {
 
 // Get current user
 app.get('/auth/me', authMiddleware, async (req, res) => {
-  const users = db.collection('users');
-  const user = await users.findOne({ _id: new ObjectId(req.user.userId) }, { projection: { password: 0 } });
-  res.json({ user });
+  try {
+    console.log('Auth /me - userId:', req.user.userId);
+    const users = db.collection('users');
+    const user = await users.findOne({ _id: new ObjectId(req.user.userId) }, { projection: { password: 0 } });
+    console.log('Auth /me - found user:', user);
+    res.json({ user });
+  } catch (e) {
+    console.error('Auth /me error:', e);
+    res.status(500).json({ message: 'Failed to get user' });
+  }
 });
 
 // Create quiz with questions
